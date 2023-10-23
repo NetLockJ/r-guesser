@@ -1,0 +1,32 @@
+#title {
+    text-align: center;
+}
+
+.center-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#selectors {
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    width: max-content;
+}
+
+#selectors div {
+    margin: 5px;
+    padding: 7px;
+    border-style: solid none solid none;
+    border-color: black;
+    border-radius: 2px;
+}
+
+
+button {
+    margin-right: 10px;
+}
+
+

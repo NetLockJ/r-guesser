@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>R-Guesser!</title>
+    <script defer src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 id="title">R-Guesser</h1>
+    <div id="graph" class="center-items"></div>
+    <div id="selectors">
+        <div class="center-items">
+            <button onclick="generateRandomPoints()">Generate</button>
+            <input type="text" placeholder="Number of Points" id="points-input">
+        </div>
+        <div class="center-items">
+            <button onclick="revealData()">Guess</button>
+            <input id="guess-input" type="text" placeholder="R-Value Guess">
+        </div>
+    </div>
+    <div class="center-items borderless">
+        <span id="reveal" style="font-size: 20px;">???</span>
+    </div>
+</body>
+</html>
