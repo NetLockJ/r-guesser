@@ -4,29 +4,32 @@ const pointsInput = document.getElementById("points-input");
 const guessInput = document.getElementById("guess-input");
 
 window.onload = function () {
-    pointsInput.value = "10";
-    numPoints = 10;
-    generateRandomPoints();
-}
+  pointsInput.value = "10";
+  numPoints = 10;
+  generateRandomPoints();
+};
 
 pointsInput.addEventListener("input", (event) => {
   numPoints = pointsInput.value == "" ? 25 : pointsInput.value;
 });
 
 guessInput.addEventListener("keydown", (event) => {
-    if(event.key === "Enter") {
-        if(!isNewData) {
-            generateRandomPoints();
-        } else {
-            revealData();
-        }
+  if (event.key === "Enter") {
+    if (!isNewData) {
+      generateRandomPoints();
+    } else {
+      revealData();
     }
+  }
 });
 
 // Global start set constants
 var numPoints = pointsInput.value;
 var coorelation = 1;
 var isNewData = true;
+
+var numGuesses = 0;
+var avgDev = 0;
 
 // Starting plot points
 var plotPoints = {
@@ -73,7 +76,9 @@ const plot = Plotly.newPlot(graph, data, layout, { staticPlot: true });
 function revealData() {
   if (isNewData) {
     reveal.innerText = calculateR().toFixed(3);
-    var guess = document.getElementById("guess-input").value;
+    var guess = guessInput.value;
+
+    updateAverageDev();
 
     if (Math.abs(guess - calculateR().toFixed(3)) < 0.1) {
       reveal.style.color = "green";
@@ -103,17 +108,17 @@ function generateRandomPoints() {
       // Push random noise generated value to x
       plotPoints.x.push(Math.abs(coors[0]));
       // Push adjusted value to y, add 10 if is negative to keep axis numbers positive
-      plotPoints.y.push(neg * lerp(0, 10, i / numPoints) + (neg < 0 ? 10: 0));
+      plotPoints.y.push(neg * lerp(0, 10, i / numPoints) + (neg < 0 ? 10 : 0));
     }
 
     reveal.style.color = "black";
     reveal.innerText = "???";
 
     updatePlot();
-
   } else {
-    reveal.innerText = "Doing this many points won't yield a good result " +
-         "and consume lots of RAM, I'd advise against it.";
+    reveal.innerText =
+      "Doing this many points won't yield a good result " +
+      "and consume lots of RAM, I'd advise against it.";
   }
 }
 
@@ -165,4 +170,12 @@ function calculateR() {
       (numPoints * sumXsq - sumX * sumX) * (numPoints * sumYsq - sumY * sumY)
     )
   );
+}
+
+// Updates avg dev and progress bar
+function updateAverageDev() {
+  avgDev = (avgDev * numGuesses + Math.abs(calculateR().toFixed(3) - guessInput.value)) / (numGuesses + 1);
+  numGuesses++;
+  document.getElementById("progress-bar").setAttribute("x", Math.max(Math.min(198 - lerp(0, 198, avgDev), 198), 0) + "px");
+  document.getElementById("average-dev").textContent = avgDev.toFixed(3) > 1 ? ">1.000" : avgDev.toFixed(3);
 }
